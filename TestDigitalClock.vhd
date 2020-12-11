@@ -8,36 +8,26 @@ architecture Behavioral of TestDigitalClock is
 
     component DigitalClock
         port ( 
-            clk: in std_logic; 
-            rst: in std_logic; 
-            H_in1: in std_logic_vector(1 downto 0);
-            H_in0: in std_logic_vector(3 downto 0);
-            M_in1: in std_logic_vector(3 downto 0);
-            M_in0: in std_logic_vector(3 downto 0);
-            H_out1: out std_logic_vector(6 downto 0);
-            H_out0: out std_logic_vector(6 downto 0);
-            M_out1: out std_logic_vector(6 downto 0);
-            M_out0: out std_logic_vector(6 downto 0);
-				S_out1: out std_logic_vector(6 downto 0);
-            S_out0: out std_logic_vector(6 downto 0)
+				clk: in std_logic; 			
+				rst: in std_logic; 
+				H_in: in std_logic_vector(4 downto 0);
+				M_in: in std_logic_vector(5 downto 0);
+				H_out: out std_logic_vector(4 downto 0);
+				M_out: out std_logic_vector(5 downto 0);
+				S_out: out std_logic_vector(5 downto 0)
         );
     end component;
 
     --Inputs
     signal clk : std_logic := '0';
     signal rst : std_logic := '0';
-    signal H_in1 : std_logic_vector(1 downto 0) := (others => '0');
-    signal H_in0 : std_logic_vector(3 downto 0) := (others => '0');
-    signal M_in1 : std_logic_vector(3 downto 0) := (others => '0');
-    signal M_in0 : std_logic_vector(3 downto 0) := (others => '0');
+    signal H_in : std_logic_vector(4 downto 0) := (others => '0');
+    signal M_in : std_logic_vector(5 downto 0) := (others => '0');
 
     --Outputs
-    signal H_out1 : std_logic_vector(6 downto 0);
-    signal H_out0 : std_logic_vector(6 downto 0);
-    signal M_out1 : std_logic_vector(6 downto 0);
-    signal M_out0 : std_logic_vector(6 downto 0);
-    signal S_out1 : std_logic_vector(6 downto 0);
-    signal S_out0 : std_logic_vector(6 downto 0);
+    signal H_out : std_logic_vector(4 downto 0);
+    signal M_out : std_logic_vector(5 downto 0);
+    signal S_out : std_logic_vector(5 downto 0);
 
     -- Clock period definitions
     constant clk_period : time := 10 ps;
@@ -47,16 +37,11 @@ begin
     uut: DigitalClock PORT MAP (
         clk => clk,
         rst => rst,
-        H_in1 => H_in1,
-        H_in0 => H_in0,
-        M_in1 => M_in1,
-        M_in0 => M_in0,
-        H_out1 => H_out1,
-        H_out0 => H_out0,
-        M_out1 => M_out1,
-        M_out0 => M_out0,
-		  S_out1 => S_out1,
-        S_out0 => S_out0
+        H_in => H_in,
+        M_in => M_in,        
+        H_out => H_out,
+        M_out => M_out,
+        S_out => S_out
     );
 
     -- Clock process definitions
@@ -72,13 +57,13 @@ begin
     stim_proc: process
     begin 
         -- hold reset state for 100 ns.
-        rst <= '0';
-        H_in1 <= "01";
-        H_in0 <= x"0";
-        M_in1 <= x"2";
-        M_in0 <= x"0";
-        wait for 100 ns; 
         rst <= '1';
+		  -- 5 hours
+        H_in <= "00101";
+		  -- 5 minutes
+        M_in <= "000101";
+        wait for 100 ns; 
+        rst <= '0';
         wait for clk_period * 10;
         -- insert stimulus here 
         wait;
