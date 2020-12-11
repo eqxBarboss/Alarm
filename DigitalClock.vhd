@@ -33,29 +33,29 @@ architecture Behavioral of DigitalClock is
 	end component;
 
 	signal oneSecondPulse: std_logic; -- 1-s clock
-	signal counterHours, counterMinutes, counterSeconds: integer;
+	signal hours, minutes, seconds: integer;
 
 begin
 	-- Create 1-s clock
-	oneSecClock: OneSecondClock port map (clk_50 => clk, oneSecondPulse => oneSecondPulse); 
+	ONE_SECOND_CLOCK: OneSecondClock port map (clk_50 => clk, oneSecondPulse => oneSecondPulse); 
 
 	-- Clock operation
 	process (oneSecondPulse, rst)
 	begin 
 		if (rst = '1') then
-			counterHours <= to_integer(unsigned(H_in));
-			counterMinutes <= to_integer(unsigned(M_in));
-			counterSeconds <= 0;
+			hours <= to_integer(unsigned(H_in));
+			minutes <= to_integer(unsigned(M_in));
+			seconds <= 0;
 		elsif (rising_edge(oneSecondPulse)) then
-			counterSeconds <= counterSeconds + 1;
-			if (counterSeconds >= 59) then -- seconds overflow
-				counterMinutes <= counterMinutes + 1;
-				counterSeconds <= 0;
-				if (counterMinutes >= 59) then -- minutes overflow
-					counterMinutes <= 0;
-					counterHours <= counterHours + 1;
-					if (counterHours >= 24) then -- hours overflow
-						counterHours <= 0;
+			seconds <= seconds + 1;
+			if (seconds >= 59) then -- seconds overflow
+				minutes <= minutes + 1;
+				seconds <= 0;
+				if (minutes >= 59) then -- minutes overflow
+					minutes <= 0;
+					hours <= hours + 1;
+					if (hours >= 24) then -- hours overflow
+						hours <= 0;
 					end if;
 				end if;
 			end if;
@@ -63,8 +63,8 @@ begin
 	end process;
 
 	-- Output
-	H_out <= std_logic_vector(to_unsigned(counterHours, 5));
-	M_out <= std_logic_vector(to_unsigned(counterMinutes, 6));
-	S_out <= std_logic_vector(to_unsigned(counterSeconds, 6));
+	H_out <= std_logic_vector(to_unsigned(hours, 5));
+	M_out <= std_logic_vector(to_unsigned(minutes, 6));
+	S_out <= std_logic_vector(to_unsigned(seconds, 6));
 
 end Behavioral;
