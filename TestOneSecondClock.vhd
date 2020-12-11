@@ -2,8 +2,8 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
  
 -- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---USE ieee.numeric_std.ALL;
+-- Arithmetic functions with Signed or Unsigned values
+-- USE ieee.numeric_std.ALL;
  
 ENTITY TestOneSecondClock IS
 END TestOneSecondClock;
@@ -23,7 +23,7 @@ ARCHITECTURE behavior OF TestOneSecondClock IS
    --Inputs
    signal clk_50 : std_logic := '0';
 
- 	--Outputs
+   --Outputs
    signal oneSecondPulse : std_logic;
 
    -- Clock period definitions
@@ -31,7 +31,7 @@ ARCHITECTURE behavior OF TestOneSecondClock IS
  
 BEGIN
  
-	-- Instantiate the Unit Under Test (UUT)
+   -- Instantiate the Unit Under Test (UUT)
    uut: OneSecondClock PORT MAP (
           clk_50 => clk_50,
           oneSecondPulse => oneSecondPulse
@@ -40,10 +40,10 @@ BEGIN
    -- Clock process definitions
    clk_50_process :process
    begin
-		clk_50 <= '0';
-		wait for clk_50_period/2;
-		clk_50 <= '1';
-		wait for clk_50_period/2;
+      clk_50 <= '0';
+      wait for clk_50_period/2;
+      clk_50 <= '1';
+      wait for clk_50_period/2;
    end process;
  
 

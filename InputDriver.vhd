@@ -3,8 +3,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.all;
 
 entity InputDriver is
-	port ( 
-		clk: in std_logic; 
+    port ( 
+        clk: in std_logic; 
         timeButton: in std_logic;
         alarmButton: in std_logic;
         incrementHoursButton: in std_logic;
@@ -20,7 +20,7 @@ entity InputDriver is
         settingInProgress: out std_logic;
         -- Setting mode (0 - time, 1 - alarm)
         settingMode: out std_logic
-	);
+    );
 end InputDriver;
 
 architecture Behavioral of InputDriver is

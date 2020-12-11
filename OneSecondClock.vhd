@@ -3,10 +3,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity OneSecondClock is
-	port (
-		clk_50: in std_logic;
-		oneSecondPulse: out std_logic
-	);
+    port (
+        clk_50: in std_logic;
+        oneSecondPulse: out std_logic
+    );
 end OneSecondClock;
 
 architecture Behavioral of OneSecondClock is
@@ -15,8 +15,8 @@ architecture Behavioral of OneSecondClock is
 
 begin
 
-	-- FPGA Begin --
-	
+    -- FPGA Begin --
+
 --	process (clk_50)
 --	begin
 --		if (rising_edge(clk_50)) then
@@ -28,11 +28,11 @@ begin
 --		end if;
 --	end process;
 --	oneSecondPulse <= '0' when counter < x"17D7840" else '1';
-	
-	-- FPGA End --
-	
-	-- Simulatin Begin --
-	oneSecondPulse <= clk_50;
-	-- Simulatin End --
-	
+
+    -- FPGA End --
+
+    -- Simulatin Begin --
+    oneSecondPulse <= clk_50;
+    -- Simulatin End --
+
 end Behavioral;

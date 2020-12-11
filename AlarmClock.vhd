@@ -3,30 +3,30 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.all;
 
 entity AlarmClock is
-	port ( 
-		clk: in std_logic; 
+    port ( 
+        clk: in std_logic; 
         rst: in std_logic;
         timeButton: in std_logic;
         alarmButton: in std_logic;
         incrementHoursButton: in std_logic;
         incrementMinutesButton: in std_logic;
         disableAlarmButton: in std_logic
-        -- 
-	);
+        -- Also need to add display output here
+    );
 end AlarmClock;
 
 architecture Behavioral of AlarmClock is
 
-	component DigitalClock
-		port (
-			clk: in std_logic; 			
+    component DigitalClock
+        port (
+            clk: in std_logic; 			
             rst: in std_logic; 
             H_in: in std_logic_vector(4 downto 0);
             M_in: in std_logic_vector(5 downto 0);
             H_out: out std_logic_vector(4 downto 0);
             M_out: out std_logic_vector(5 downto 0);
             S_out: out std_logic_vector(5 downto 0)
-		);
+        );
     end component;
 
     component DigitalAlarm

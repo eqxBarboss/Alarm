@@ -8,13 +8,13 @@ architecture Behavioral of TestDigitalClock is
 
     component DigitalClock
         port ( 
-				clk: in std_logic; 			
-				rst: in std_logic; 
-				H_in: in std_logic_vector(4 downto 0);
-				M_in: in std_logic_vector(5 downto 0);
-				H_out: out std_logic_vector(4 downto 0);
-				M_out: out std_logic_vector(5 downto 0);
-				S_out: out std_logic_vector(5 downto 0)
+            clk: in std_logic; 			
+            rst: in std_logic; 
+            H_in: in std_logic_vector(4 downto 0);
+            M_in: in std_logic_vector(5 downto 0);
+            H_out: out std_logic_vector(4 downto 0);
+            M_out: out std_logic_vector(5 downto 0);
+            S_out: out std_logic_vector(5 downto 0)
         );
     end component;
 
@@ -58,9 +58,9 @@ begin
     begin 
         -- hold reset state for 100 ns.
         rst <= '1';
-		  -- 5 hours
+        -- 5 hours
         H_in <= "00101";
-		  -- 5 minutes
+        -- 5 minutes
         M_in <= "000101";
         wait for 100 ns; 
         rst <= '0';
