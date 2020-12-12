@@ -40,12 +40,7 @@ entity SevenSegmentDisplay is
 		  Alarm_on: in std_logic;
 		  Blink: in std_logic;
         Segm1_out: out std_logic_vector(6 downto 0);
-        Segm2_out: out std_logic_vector(6 downto 0);
-		  Segm3_out: out std_logic_vector(6 downto 0);
-		  Segm4_out: out std_logic_vector(6 downto 0);
-		  Segm5_out: out std_logic_vector(6 downto 0);
-		  Segm6_out: out std_logic_vector(6 downto 0);
-		  SegmAlarm_out: out std_logic_vector(6 downto 0)
+		  Control: out std_logic_vector(7 downto 0)
     );
 end SevenSegmentDisplay;
 
@@ -92,12 +87,22 @@ architecture Behavioral of SevenSegmentDisplay is
 	signal S_out1_temp: std_logic_vector(3 downto 0); 
 	signal S_out0_temp: std_logic_vector(3 downto 0); 
 	signal Alarm_temp: std_logic_vector(3 downto 0);
+	
+	signal DigitIndex: std_logic_vector(2 downto 0) := "000";
+	signal DataBinary: std_logic_vector(3 downto 0);
+	signal DataBinary_temp: std_logic_vector(3 downto 0);
 begin	
 
 	QUARTER_SECOND_CLOCK: ClockDivider port map (REAL_TIME_CLOCK_THREASHOLD_STUB, clk, pulse); 
 	
 	process(pulse, Blink)
 	begin	
+		if rising_edge(CLK) then
+			DigitIndex <= DigitIndex + 1;
+			if (DigitIndex = "111") then
+				DigitIndex <= "000";
+			end if;
+		end if;
 		if(rising_edge(pulse)) then
 			count <= count + 1;
 			if (count > 4) then
@@ -105,21 +110,9 @@ begin
 			end if;
 		end if;
 		if (count = 4) and (Blink = '1') then
-			H_out1_bin <= Empty; 
-			H_out0_bin <= Empty; 
-			M_out1_bin <= Empty; 
-			M_out0_bin <= Empty;
-			S_out1_bin <= Empty;
-			S_out0_bin <= Empty;
-			Alarm_bin <= Empty;
+			DataBinary <= Empty;
 		else
-			H_out1_bin <= H_out1_temp; 
-			H_out0_bin <= H_out0_temp; 
-			M_out1_bin <= M_out1_temp; 
-			M_out0_bin <= M_out0_temp;
-			S_out1_bin <= S_out1_temp;
-			S_out0_bin <= S_out0_temp;
-			Alarm_bin <= Alarm_temp;
+			DataBinary <= DataBinary_temp;
 		end if;	
 	end process;
 	
@@ -152,21 +145,29 @@ begin
 	S_out0_temp <= std_logic_vector(to_unsigned((seconds - to_integer(unsigned(S_out1_temp)) * 10), 4));
 
 	Alarm_temp <= "1010" when Alarm_on = '1'
-	else Empty;
+	else Empty;	
 	
-	Decoder1: Decoder port map (Encoded => H_out1_bin, Decoded => Segm1_out); 
-
-	Decoder2: Decoder port map (Encoded => H_out0_bin, Decoded => Segm2_out); 
+	with DigitIndex select DataBinary_temp <=
+		H_out1_temp when "000",
+		H_out0_temp when "001",
+		M_out1_temp when "010",
+		M_out0_temp when "011",
+		S_out1_temp when "100",
+		S_out0_temp when "101",
+		Alarm_temp when "110",
+		"0000" when others;
+		
+	with DigitIndex select Control <=
+		"01111111" when "000",
+		"10111111" when "001",
+		"11011111" when "010",
+		"11101111" when "011",
+		"11110111" when "100",
+		"11111011" when "101",
+		"11111110" when "110",
+		"11111111" when others;
 	
-	Decoder3: Decoder port map (Encoded => M_out1_bin, Decoded => Segm3_out); 
-
-	Decoder4: Decoder port map (Encoded => M_out0_bin, Decoded => Segm4_out);
-
-	Decoder5: Decoder port map (Encoded => S_out1_bin, Decoded => Segm5_out); 
-
-	Decoder6: Decoder port map (Encoded => S_out0_bin, Decoded => Segm6_out);
-	
-	DecoderAlarm: Decoder port map (Encoded => Alarm_bin, Decoded => SegmAlarm_out);
+	Decoder1: Decoder port map (Encoded => DataBinary, Decoded => Segm1_out); 
 
 end Behavioral;
 

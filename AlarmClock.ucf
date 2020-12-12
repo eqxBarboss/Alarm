@@ -1,0 +1,66 @@
+# PlanAhead Generated IO constraints 
+# -- Inputs
+
+NET "EditEnable" CLOCK_DEDICATED_ROUTE = FALSE;
+
+# CLK
+NET "clk" IOSTANDARD = LVCMOS33;
+
+# Buttons
+NET "timeButton" IOSTANDARD = LVCMOS33;
+NET "alarmButton" IOSTANDARD = LVCMOS33;
+NET "incrementHoursButton" IOSTANDARD = LVCMOS33;
+NET "incrementMinutesButton" IOSTANDARD = LVCMOS33;
+NET "disableAlarmButton" IOSTANDARD = LVCMOS33;
+
+# DisplayControl
+NET "DisplayControl[7]" IOSTANDARD = LVCMOS33;
+NET "DisplayControl[6]" IOSTANDARD = LVCMOS33;
+NET "DisplayControl[5]" IOSTANDARD = LVCMOS33;
+NET "DisplayControl[4]" IOSTANDARD = LVCMOS33;
+NET "DisplayControl[3]" IOSTANDARD = LVCMOS33;
+NET "DisplayControl[2]" IOSTANDARD = LVCMOS33;
+NET "DisplayControl[1]" IOSTANDARD = LVCMOS33;
+NET "DisplayControl[0]" IOSTANDARD = LVCMOS33;
+
+# DisplayData
+NET "DisplayData[6]" IOSTANDARD = LVCMOS33;
+NET "DisplayData[5]" IOSTANDARD = LVCMOS33;
+NET "DisplayData[4]" IOSTANDARD = LVCMOS33;
+NET "DisplayData[3]" IOSTANDARD = LVCMOS33;
+NET "DisplayData[2]" IOSTANDARD = LVCMOS33;
+NET "DisplayData[1]" IOSTANDARD = LVCMOS33;
+NET "DisplayData[0]" IOSTANDARD = LVCMOS33;
+
+# PlanAhead Generated physical constraints 
+
+# -- Inputs
+
+# CLK
+NET "clk" LOC = E3;
+
+# Buttons
+NET "timeButton" LOC = F15;
+NET "alarmButton" LOC = V10;
+NET "incrementHoursButton" LOC = T16;
+NET "incrementMinutesButton" LOC = R10;
+NET "disableAlarmButton" LOC = E16;
+
+# DisplayControl
+NET "DisplayControl[7]" LOC = M1;
+NET "DisplayControl[6]" LOC = L1;
+NET "DisplayControl[5]" LOC = N4;
+NET "DisplayControl[4]" LOC = N2;
+NET "DisplayControl[3]" LOC = N5;
+NET "DisplayControl[2]" LOC = M3;
+NET "DisplayControl[1]" LOC = M6;
+NET "DisplayControl[0]" LOC = N6;
+
+# DisplayData
+NET "DisplayData[6]" LOC = L3;
+NET "DisplayData[5]" LOC = N1;
+NET "DisplayData[4]" LOC = L5;
+NET "DisplayData[3]" LOC = L4;
+NET "DisplayData[2]" LOC = K3;
+NET "DisplayData[1]" LOC = M2;
+NET "DisplayData[0]" LOC = L6;

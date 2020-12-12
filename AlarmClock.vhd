@@ -12,13 +12,8 @@ entity AlarmClock is
         incrementHoursButton: in std_logic;
         incrementMinutesButton: in std_logic;
         disableAlarmButton: in std_logic;
-        Display1: out std_logic_vector(6 downto 0);
-		  Display2: out std_logic_vector(6 downto 0);
-		  Display3: out std_logic_vector(6 downto 0);
-		  Display4: out std_logic_vector(6 downto 0);
-		  Display5: out std_logic_vector(6 downto 0);
-		  Display6: out std_logic_vector(6 downto 0);
-		  DisplayA: out std_logic_vector(6 downto 0)
+        DisplayData: out std_logic_vector(6 downto 0);
+		  DisplayControl: out std_logic_vector(7 downto 0)
     );
 end AlarmClock;
 
@@ -184,13 +179,8 @@ begin
 		  , secondsToDisplay
 		  , isAlarmSet
 		  , blink
-		  , Display1
-		  , Display2
-		  , Display3
-		  , Display4
-		  , Display5
-		  , Display6
-		  , DisplayA
+		  , DisplayData
+		  , DisplayControl
     );
 
 
