@@ -1,7 +1,7 @@
 # PlanAhead Generated IO constraints 
 # -- Inputs
 
-NET "EditEnable" CLOCK_DEDICATED_ROUTE = FALSE;
+#NET "EditEnable" CLOCK_DEDICATED_ROUTE = FALSE;
 
 # CLK
 NET "clk" IOSTANDARD = LVCMOS33;
