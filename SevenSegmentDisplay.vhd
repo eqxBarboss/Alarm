@@ -19,6 +19,8 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.all;
+use IEEE.STD_LOGIC_ARITH.conv_std_logic_vector;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -71,7 +73,7 @@ architecture Behavioral of SevenSegmentDisplay is
 	signal count: integer;
 	
 	constant REAL_TIME_CLOCK_THREASHOLD: std_logic_vector(31 downto 0) := conv_std_logic_vector(25000000, 32);
-	constant REAL_TIME_CLOCK_THREASHOLD_STUB: std_logic_vector(31 downto 0) := conv_std_logic_vector(1, 8);
+	constant REAL_TIME_CLOCK_THREASHOLD_STUB: std_logic_vector(31 downto 0) := conv_std_logic_vector(1, 32);
 	
 	constant Empty: std_logic_vector(3 downto 0) := "1111";
 
@@ -82,62 +84,75 @@ architecture Behavioral of SevenSegmentDisplay is
 	signal S_out1_bin: std_logic_vector(3 downto 0); -- The most significant digit of the second
 	signal S_out0_bin: std_logic_vector(3 downto 0); -- The least significant digit of the second
 	signal Alarm_bin: std_logic_vector(3 downto 0);
+	
+	signal H_out1_temp: std_logic_vector(3 downto 0);
+	signal H_out0_temp: std_logic_vector(3 downto 0);
+	signal M_out1_temp: std_logic_vector(3 downto 0);
+	signal M_out0_temp: std_logic_vector(3 downto 0);
+	signal S_out1_temp: std_logic_vector(3 downto 0); 
+	signal S_out0_temp: std_logic_vector(3 downto 0); 
+	signal Alarm_temp: std_logic_vector(3 downto 0);
 begin	
 
 	QUARTER_SECOND_CLOCK: ClockDivider port map (REAL_TIME_CLOCK_THREASHOLD_STUB, clk, pulse); 
 	
-	process(pulse, Blink, clk)
-	begin
-		if(rising_edge(clk)) then
-			if(rising_edge(pulse)) then
-				count <= count + 1;
-				if (count > 4) then
-					count <= 1;
-				end if;
+	process(pulse, Blink)
+	begin	
+		if(rising_edge(pulse)) then
+			count <= count + 1;
+			if (count > 4) then
+				count <= 1;
 			end if;
-			if (count = 4) and (Blink = '1') then
-				H_out1_bin <= Empty; 
-				H_out0_bin <= Empty; 
-				M_out1_bin <= Empty; 
-				M_out0_bin <= Empty;
-				S_out1_bin <= Empty;
-				S_out0_bin <= Empty;
-				Alarm_bin <= Empty;
-			else
-				hours <= to_integer(unsigned(H_in));
-				minutes <= to_integer(unsigned(M_in));
-				seconds <= to_integer(unsigned(S_in));
-
-				H_out1_bin <= x"2" when hours >= 20 
-				else x"1" when hours >= 10 
-				else x"0";
-				
-				H_out0_bin <= std_logic_vector(to_unsigned((hours - to_integer(unsigned(H_out1_bin)) * 10), 4));
-
-				M_out1_bin <= x"5" when minutes >= 50 
-				else x"4" when minutes >= 40
-				else x"3" when minutes >= 30
-				else x"2" when minutes >= 20
-				else x"1" when minutes >= 10 
-				else x"0";
-
-				M_out0_bin <= std_logic_vector(to_unsigned((minutes - to_integer(unsigned(M_out1_bin)) * 10), 4));
-
-				S_out1_bin <= x"5" when seconds >= 50 
-				else x"4" when seconds >= 40
-				else x"3" when seconds >= 30
-				else x"2" when seconds >= 20
-				else x"1" when seconds >= 10 
-				else x"0";
-
-				S_out0_bin <= std_logic_vector(to_unsigned((seconds - to_integer(unsigned(S_out1_bin)) * 10), 4));
-
-				Alarm_bin <= "1010" when Alarm_on = '1'
-				else Empty;
-			end if;	
 		end if;
+		if (count = 4) and (Blink = '1') then
+			H_out1_bin <= Empty; 
+			H_out0_bin <= Empty; 
+			M_out1_bin <= Empty; 
+			M_out0_bin <= Empty;
+			S_out1_bin <= Empty;
+			S_out0_bin <= Empty;
+			Alarm_bin <= Empty;
+		else
+			H_out1_bin <= H_out1_temp; 
+			H_out0_bin <= H_out0_temp; 
+			M_out1_bin <= M_out1_temp; 
+			M_out0_bin <= M_out0_temp;
+			S_out1_bin <= S_out1_temp;
+			S_out0_bin <= S_out0_temp;
+			Alarm_bin <= Alarm_temp;
+		end if;	
 	end process;
 	
+	hours <= to_integer(unsigned(H_in));
+	minutes <= to_integer(unsigned(M_in));
+	seconds <= to_integer(unsigned(S_in));
+
+	H_out1_temp <= x"2" when hours >= 20 
+	else x"1" when hours >= 10 
+	else x"0";
+	
+	H_out0_temp <= std_logic_vector(to_unsigned((hours - to_integer(unsigned(H_out1_bin)) * 10), 4));
+
+	M_out1_temp <= x"5" when minutes >= 50 
+	else x"4" when minutes >= 40
+	else x"3" when minutes >= 30
+	else x"2" when minutes >= 20
+	else x"1" when minutes >= 10 
+	else x"0";
+
+	M_out0_temp <= std_logic_vector(to_unsigned((minutes - to_integer(unsigned(M_out1_bin)) * 10), 4));
+
+	S_out1_temp <= x"5" when seconds >= 50 
+	else x"4" when seconds >= 40
+	else x"3" when seconds >= 30
+	else x"2" when seconds >= 20
+	else x"1" when seconds >= 10 
+	else x"0";
+
+	S_out0_temp <= std_logic_vector(to_unsigned((seconds - to_integer(unsigned(S_out1_bin)) * 10), 4));
+
+	Alarm_temp <= "1010" when Alarm_on = '1'
+	else Empty;
 	
 	Decoder1: Decoder port map (Encoded => H_out1_bin, Decoded => Segm1_out); 
 
