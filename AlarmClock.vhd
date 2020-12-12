@@ -37,6 +37,24 @@ architecture Behavioral of AlarmClock is
             S_out: out std_logic_vector(5 downto 0)
         );
     end component;
+	 
+	 component SevenSegmentDisplay
+        port (     
+			  clk: in std_logic;
+			  H_in: in std_logic_vector(4 downto 0);        
+			  M_in: in std_logic_vector(5 downto 0);
+			  S_in: in std_logic_vector(5 downto 0);
+			  Alarm_on: in std_logic;
+			  Blink: in std_logic;
+			  Segm1_out: out std_logic_vector(6 downto 0);
+			  Segm2_out: out std_logic_vector(6 downto 0);
+			  Segm3_out: out std_logic_vector(6 downto 0);
+			  Segm4_out: out std_logic_vector(6 downto 0);
+			  Segm5_out: out std_logic_vector(6 downto 0);
+			  Segm6_out: out std_logic_vector(6 downto 0);
+			  SegmAlarm_out: out std_logic_vector(6 downto 0)
+		 );
+    end component;
 
     component DigitalAlarm
         port (
@@ -98,8 +116,13 @@ architecture Behavioral of AlarmClock is
     signal settingMode: std_logic;
     signal alarm: std_logic;
     signal isAlarmSet: std_logic;
+	 
+	 signal blink: std_logic;
 
 begin
+
+	 blink <= '1' when alarm = '1' or settingInProgress = '1'
+	 else '0';
     -- Time setting process
     resetTime <= '1' when ((settingDone = '1') and (settingMode = '0')) else '0';
     resetAlarm <= '1' when ((settingDone = '1') and (settingMode = '1')) else '0';
@@ -146,6 +169,22 @@ begin
         , settingDone
         , settingInProgress
         , settingMode
+    );
+	 
+	 SEVEN_SEGMENT_DISPLAY: SevenSegmentDisplay port map (
+			 clk
+		  , hoursToDisplay       
+		  , minutesToDisplay
+		  , secondsToDisplay
+		  , isAlarmSet
+		  , blink
+		  , Display1
+		  , Display2
+		  , Display3
+		  , Display4
+		  , Display5
+		  , Display6
+		  , DisplayA
     );
 
 
