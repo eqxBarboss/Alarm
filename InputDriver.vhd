@@ -9,7 +9,6 @@ entity InputDriver is
         alarmButton: in std_logic;
         incrementHoursButton: in std_logic;
         incrementMinutesButton: in std_logic;
-        disableAlarmButton: in std_logic;
         H_in: in std_logic_vector(4 downto 0);
         M_in: in std_logic_vector(5 downto 0);
         H_out: out std_logic_vector(4 downto 0);

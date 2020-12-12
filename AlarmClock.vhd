@@ -33,10 +33,12 @@ architecture Behavioral of AlarmClock is
         port (
             clk: in std_logic;
             rst: in std_logic;
+            turnOff: in std_logic;
             H_in: in std_logic_vector(4 downto 0);
             M_in: in std_logic_vector(5 downto 0);
             currentHours: in std_logic_vector(4 downto 0);
             currentMinutes: in std_logic_vector(5 downto 0);
+            isAlarmSet: out std_logic;
             alarm: out std_logic
         );
     end component;
@@ -48,7 +50,6 @@ architecture Behavioral of AlarmClock is
             alarmButton: in std_logic;
             incrementHoursButton: in std_logic;
             incrementMinutesButton: in std_logic;
-            disableAlarmButton: in std_logic;
             H_in: in std_logic_vector(4 downto 0);
             M_in: in std_logic_vector(5 downto 0);
             H_out: out std_logic_vector(4 downto 0);
@@ -77,6 +78,7 @@ architecture Behavioral of AlarmClock is
     signal settingInProgress: std_logic;
     signal settingMode: std_logic;
     signal alarm: std_logic;
+    signal isAlarmSet: std_logic;
 
 begin
     -- Time setting process
@@ -97,10 +99,12 @@ begin
     DIGITAL_ALARM: DigitalAlarm port map (
           clk
         , resetTime
+        , disableAlarm
         , hoursToSet
         , minutesToSet
         , hours
         , minutes
+        , isAlarmSet
         , alarm
     );
 
@@ -110,7 +114,6 @@ begin
         , alarmButton
         , incrementHoursButton
         , incrementMinutesButton
-        , disableAlarmButton
         , hours
         , minutes
         , hoursToSet
