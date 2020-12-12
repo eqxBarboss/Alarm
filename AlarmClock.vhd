@@ -86,6 +86,10 @@ architecture Behavioral of AlarmClock is
     signal hoursToSet: std_logic_vector(4 downto 0);
     signal minutesToSet: std_logic_vector(5 downto 0);
 
+    signal hoursToDisplay: std_logic_vector(4 downto 0);
+    signal minutesToDisplay: std_logic_vector(5 downto 0);
+    signal secondsToDisplay: std_logic_vector(5 downto 0);
+
     -- State signals
     signal resetTime: std_logic;
     signal resetAlarm: std_logic;
@@ -99,6 +103,10 @@ begin
     -- Time setting process
     resetTime <= '1' when ((settingDone = '1') and (settingMode = '0')) else '0';
     resetAlarm <= '1' when ((settingDone = '1') and (settingMode = '1')) else '0';
+    
+    hoursToDisplay <= hoursToSet when (settingInProgress = '1') else hours;
+    minutesToDisplay <= minutesToSet when (settingInProgress = '1') else minutes;
+    secondsToDisplay <= "000000" when (settingInProgress = '1') else seconds;
     
     -- It's fine to pass clk here, DigitalClock has a clock divider
     DIGITAL_CLOCK: DigitalClock port map (
@@ -114,7 +122,7 @@ begin
     DIGITAL_ALARM: DigitalAlarm port map (
           clk
         , resetTime
-        , disableAlarm
+        , disableAlarmButton
         , hoursToSet
         , minutesToSet
         , hours
