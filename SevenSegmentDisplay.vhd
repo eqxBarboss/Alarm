@@ -79,7 +79,7 @@ begin
 
 	QUARTER_SECOND_CLOCK: ClockDivider port map (REAL_TIME_CLOCK_THREASHOLD_STUB, clk, pulse); 
 	
-	process(pulse, Blink)
+	process(pulse, refreshClk, Blink)
 	begin	
 		if rising_edge(refreshClk) then
 			DigitIndex <= DigitIndex + 1;
