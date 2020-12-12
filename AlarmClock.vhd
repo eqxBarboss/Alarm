@@ -43,18 +43,14 @@ architecture Behavioral of AlarmClock is
 	 component SevenSegmentDisplay
         port (     
 			  clk: in std_logic;
+			  refreshClk: in std_logic;
 			  H_in: in std_logic_vector(4 downto 0);        
 			  M_in: in std_logic_vector(5 downto 0);
 			  S_in: in std_logic_vector(5 downto 0);
 			  Alarm_on: in std_logic;
 			  Blink: in std_logic;
 			  Segm1_out: out std_logic_vector(6 downto 0);
-			  Segm2_out: out std_logic_vector(6 downto 0);
-			  Segm3_out: out std_logic_vector(6 downto 0);
-			  Segm4_out: out std_logic_vector(6 downto 0);
-			  Segm5_out: out std_logic_vector(6 downto 0);
-			  Segm6_out: out std_logic_vector(6 downto 0);
-			  SegmAlarm_out: out std_logic_vector(6 downto 0)
+			  Control: out std_logic_vector(7 downto 0)
 		 );
     end component;
 
