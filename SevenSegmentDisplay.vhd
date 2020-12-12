@@ -1,26 +1,9 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    13:30:54 12/12/2020 
--- Design Name: 
--- Module Name:    SevenSegmentDisplay - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
---
--- Dependencies: 
---
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
---
-----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.all;
 use IEEE.STD_LOGIC_ARITH.conv_std_logic_vector;
+use ieee.std_logic_unsigned.all;
+
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -34,6 +17,7 @@ use IEEE.STD_LOGIC_ARITH.conv_std_logic_vector;
 entity SevenSegmentDisplay is
     port (     
 		  clk: in std_logic;
+		  refreshClk: in std_logic;
         H_in: in std_logic_vector(4 downto 0);        
         M_in: in std_logic_vector(5 downto 0);
 		  S_in: in std_logic_vector(5 downto 0);
@@ -97,7 +81,7 @@ begin
 	
 	process(pulse, Blink)
 	begin	
-		if rising_edge(CLK) then
+		if rising_edge(refreshClk) then
 			DigitIndex <= DigitIndex + 1;
 			if (DigitIndex = "111") then
 				DigitIndex <= "000";

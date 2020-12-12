@@ -6,6 +6,7 @@ use IEEE.STD_LOGIC_ARITH.conv_std_logic_vector;
 entity AlarmClock is
     port ( 
         clk: in std_logic; 
+		  refreshClk: in std_logic;
         rst: in std_logic;
         timeButton: in std_logic;
         alarmButton: in std_logic;
@@ -101,6 +102,7 @@ architecture Behavioral of AlarmClock is
 
     -- Clocks
     signal inputDriverClk: std_logic;
+	 signal SevenSegmentDisplayClock: std_logic;
 
     signal hoursToSet: std_logic_vector(4 downto 0);
     signal minutesToSet: std_logic_vector(5 downto 0);
@@ -119,6 +121,8 @@ architecture Behavioral of AlarmClock is
     signal isAlarmSet: std_logic;
 	 
 	 signal blink: std_logic;
+	 
+	 constant SEVEN_SEGMENT_DISPLAY_CLOCK_THREASHOLD: std_logic_vector(31 downto 0) := conv_std_logic_vector(25000, 32);
 
 begin
 
@@ -142,6 +146,13 @@ begin
         , minutes
         , seconds
     );
+
+	SEVEN_SEGMENT_DISPLAY_CLOCK_DIVIDER: ClockDivider
+		port map (
+			SEVEN_SEGMENT_DISPLAY_CLOCK_THREASHOLD, 
+			clk, 
+			SevenSegmentDisplayClock
+		);
 
     DIGITAL_ALARM: DigitalAlarm port map (
           clk
@@ -174,6 +185,7 @@ begin
 	 
 	 SEVEN_SEGMENT_DISPLAY: SevenSegmentDisplay port map (
 			 clk
+		  , SevenSegmentDisplayClock
 		  , hoursToDisplay       
 		  , minutesToDisplay
 		  , secondsToDisplay
