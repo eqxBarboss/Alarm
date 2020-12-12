@@ -7,12 +7,15 @@ entity DigitalAlarm is
         clk: in std_logic;
         -- 1 when setting alarm (async)
         rst: in std_logic;
+        -- To turn off alarm
+        turnOff: in std_logic;
         -- Time to set as alarm 
         H_in: in std_logic_vector(4 downto 0);
         M_in: in std_logic_vector(5 downto 0);
         -- Current time
         currentHours: in std_logic_vector(4 downto 0);
         currentMinutes: in std_logic_vector(5 downto 0);
+        isAlarmSet: out std_logic;
         alarm: out std_logic
     );
 end DigitalAlarm;
