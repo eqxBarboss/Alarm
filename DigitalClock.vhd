@@ -1,6 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.all;
+use IEEE.STD_LOGIC_ARITH.conv_std_logic_vector;
 
 entity DigitalClock is
     port ( 
@@ -25,19 +26,23 @@ end DigitalClock;
 
 architecture Behavioral of DigitalClock is
 
-    component OneSecondClock
+    component ClockDivider
         port (
-            clk_50: in std_logic;
-            oneSecondPulse: out std_logic
+            threshold: in std_logic_vector(31 downto 0);
+            clk: in std_logic;
+            dividedClk: out std_logic
         );
     end component;
+	 
+	 constant REAL_TIME_CLOCK_THREASHOLD: std_logic_vector(31 downto 0) := conv_std_logic_vector(100000000, 32);
+	 constant REAL_TIME_CLOCK_THREASHOLD_STUB: std_logic_vector(31 downto 0) := conv_std_logic_vector(1, 32);
 
     signal oneSecondPulse: std_logic; -- 1-s clock
     signal hours, minutes, seconds: integer;
 
 begin
     -- Create 1-s clock
-    ONE_SECOND_CLOCK: OneSecondClock port map (clk_50 => clk, oneSecondPulse => oneSecondPulse); 
+    ONE_SECOND_CLOCK: ClockDivider port map (REAL_TIME_CLOCK_THREASHOLD_STUB, clk, oneSecondPulse); 
 
     -- Clock operation
     process (oneSecondPulse, rst)
