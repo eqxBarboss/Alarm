@@ -70,7 +70,7 @@ architecture Behavioral of SevenSegmentDisplay is
 	
 	signal pulse: std_logic;
 	
-	signal count: integer;
+	signal count: integer := 0;
 	
 	constant REAL_TIME_CLOCK_THREASHOLD: std_logic_vector(31 downto 0) := conv_std_logic_vector(25000000, 32);
 	constant REAL_TIME_CLOCK_THREASHOLD_STUB: std_logic_vector(31 downto 0) := conv_std_logic_vector(1, 32);
