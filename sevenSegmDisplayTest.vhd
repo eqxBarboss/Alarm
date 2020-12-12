@@ -1,30 +1,3 @@
---------------------------------------------------------------------------------
--- Company: 
--- Engineer:
---
--- Create Date:   16:44:51 12/12/2020
--- Design Name:   
--- Module Name:   C:/Users/compp/Desktop/qqq/Alarm/sevenSegmDisplayTest.vhd
--- Project Name:  Alarm
--- Target Device:  
--- Tool versions:  
--- Description:   
--- 
--- VHDL Test Bench Created by ISE for module: SevenSegmentDisplay
--- 
--- Dependencies:
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
---
--- Notes: 
--- This testbench has been automatically generated using types std_logic and
--- std_logic_vector for the ports of the unit under test.  Xilinx recommends
--- that these types always be used for the top-level I/O of a design in order
--- to guarantee that the testbench will bind correctly to the post-implementation 
--- simulation model.
---------------------------------------------------------------------------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
  
@@ -112,8 +85,36 @@ BEGIN
    begin		
       -- hold reset state for 100 ns.
       wait for 100 ns;	
-
+		
+		H_in <= "10010";
+		M_in <= "100101";
+		S_in <= "001110";
+		Alarm_on <= '0';
+		Blink <= '0';
+				
       wait for clk_period*10;
+		
+		H_in <= "10010";
+		M_in <= "100101";
+		S_in <= "001110";
+		Alarm_on <= '1';
+		Blink <= '1';
+		
+		wait for clk_period*100;
+		
+		H_in <= "10110";
+		M_in <= "000101";
+		S_in <= "001110";
+		Alarm_on <= '1';
+		Blink <= '0';
+		
+		wait for clk_period*10;
+		
+		H_in <= "00110";
+		M_in <= "000100";
+		S_in <= "001010";
+		Alarm_on <= '0';
+		Blink <= '1';
 
       -- insert stimulus here 
 

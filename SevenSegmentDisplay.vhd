@@ -131,7 +131,7 @@ begin
 	else x"1" when hours >= 10 
 	else x"0";
 	
-	H_out0_temp <= std_logic_vector(to_unsigned((hours - to_integer(unsigned(H_out1_bin)) * 10), 4));
+	H_out0_temp <= std_logic_vector(to_unsigned((hours - to_integer(unsigned(H_out1_temp)) * 10), 4));
 
 	M_out1_temp <= x"5" when minutes >= 50 
 	else x"4" when minutes >= 40
@@ -140,7 +140,7 @@ begin
 	else x"1" when minutes >= 10 
 	else x"0";
 
-	M_out0_temp <= std_logic_vector(to_unsigned((minutes - to_integer(unsigned(M_out1_bin)) * 10), 4));
+	M_out0_temp <= std_logic_vector(to_unsigned((minutes - to_integer(unsigned(M_out1_temp)) * 10), 4));
 
 	S_out1_temp <= x"5" when seconds >= 50 
 	else x"4" when seconds >= 40
@@ -149,7 +149,7 @@ begin
 	else x"1" when seconds >= 10 
 	else x"0";
 
-	S_out0_temp <= std_logic_vector(to_unsigned((seconds - to_integer(unsigned(S_out1_bin)) * 10), 4));
+	S_out0_temp <= std_logic_vector(to_unsigned((seconds - to_integer(unsigned(S_out1_temp)) * 10), 4));
 
 	Alarm_temp <= "1010" when Alarm_on = '1'
 	else Empty;
