@@ -13,7 +13,15 @@ entity AlarmClock is
         incrementMinutesButton: in std_logic;
         disableAlarmButton: in std_logic;
         DisplayData: out std_logic_vector(6 downto 0);
-		  DisplayControl: out std_logic_vector(7 downto 0)
+        DisplayControl: out std_logic_vector(7 downto 0)
+
+        -- For test only
+        -- H_out: out std_logic_vector(4 downto 0);
+        -- M_out: out std_logic_vector(5 downto 0);
+        -- S_out: out std_logic_vector(5 downto 0);
+        -- alarmOut: out std_logic;
+        -- alarmOutSet: out std_logic;
+        -- settingReset: out std_logic
     );
 end AlarmClock;
 
@@ -38,19 +46,19 @@ architecture Behavioral of AlarmClock is
             S_out: out std_logic_vector(5 downto 0)
         );
     end component;
-	 
-	 component SevenSegmentDisplay
+
+    component SevenSegmentDisplay
         port (     
-			  clk: in std_logic;
-			  refreshClk: in std_logic;
-			  H_in: in std_logic_vector(4 downto 0);        
-			  M_in: in std_logic_vector(5 downto 0);
-			  S_in: in std_logic_vector(5 downto 0);
-			  Alarm_on: in std_logic;
-			  Blink: in std_logic;
-			  Segm1_out: out std_logic_vector(6 downto 0);
-			  Control: out std_logic_vector(7 downto 0)
-		 );
+            clk: in std_logic;
+            refreshClk: in std_logic;
+            H_in: in std_logic_vector(4 downto 0);        
+            M_in: in std_logic_vector(5 downto 0);
+            S_in: in std_logic_vector(5 downto 0);
+            Alarm_on: in std_logic;
+            Blink: in std_logic;
+            Segm1_out: out std_logic_vector(6 downto 0);
+            Control: out std_logic_vector(7 downto 0)
+        );
     end component;
 
     component DigitalAlarm
@@ -89,6 +97,9 @@ architecture Behavioral of AlarmClock is
 
     -- Clock for input driver has 0.1s period
     constant INPUT_CLOCK_THREASHOLD: std_logic_vector(31 downto 0) := conv_std_logic_vector(10000000, 32);
+    constant SEVEN_SEGMENT_DISPLAY_CLOCK_THREASHOLD: std_logic_vector(31 downto 0) := conv_std_logic_vector(25000, 32);
+    -- constant INPUT_CLOCK_THREASHOLD: std_logic_vector(31 downto 0) := conv_std_logic_vector(10, 32);
+    -- constant SEVEN_SEGMENT_DISPLAY_CLOCK_THREASHOLD: std_logic_vector(31 downto 0) := conv_std_logic_vector(1, 32);
 
     -- Time data
     signal hours: std_logic_vector(4 downto 0);
@@ -97,7 +108,7 @@ architecture Behavioral of AlarmClock is
 
     -- Clocks
     signal inputDriverClk: std_logic;
-	 signal SevenSegmentDisplayClock: std_logic;
+    signal SevenSegmentDisplayClock: std_logic;
 
     signal hoursToSet: std_logic_vector(4 downto 0);
     signal minutesToSet: std_logic_vector(5 downto 0);
@@ -114,15 +125,13 @@ architecture Behavioral of AlarmClock is
     signal settingMode: std_logic;
     signal alarm: std_logic;
     signal isAlarmSet: std_logic;
-	 
-	 signal blink: std_logic;
-	 
-	 constant SEVEN_SEGMENT_DISPLAY_CLOCK_THREASHOLD: std_logic_vector(31 downto 0) := conv_std_logic_vector(25000, 32);
+
+    signal blink: std_logic;
 
 begin
 
-	 blink <= '1' when alarm = '1' or settingInProgress = '1'
-	 else '0';
+    blink <= '1' when alarm = '1' or settingInProgress = '1'
+    else '0';
     -- Time setting process
     resetTime <= '1' when ((settingDone = '1') and (settingMode = '0')) else '0';
     resetAlarm <= '1' when ((settingDone = '1') and (settingMode = '1')) else '0';
@@ -134,7 +143,7 @@ begin
     -- It's fine to pass clk here, DigitalClock has a clock divider
     DIGITAL_CLOCK: DigitalClock port map (
           clk
-        , resetAlarm
+        , resetTime
         , hoursToSet
         , minutesToSet
         , hours
@@ -142,16 +151,16 @@ begin
         , seconds
     );
 
-	SEVEN_SEGMENT_DISPLAY_CLOCK_DIVIDER: ClockDivider
-		port map (
-			SEVEN_SEGMENT_DISPLAY_CLOCK_THREASHOLD, 
-			clk, 
-			SevenSegmentDisplayClock
-		);
+    SEVEN_SEGMENT_DISPLAY_CLOCK_DIVIDER: ClockDivider
+        port map (
+            SEVEN_SEGMENT_DISPLAY_CLOCK_THREASHOLD, 
+            clk, 
+            SevenSegmentDisplayClock
+    );
 
     DIGITAL_ALARM: DigitalAlarm port map (
           clk
-        , resetTime
+        , resetAlarm
         , disableAlarmButton
         , hoursToSet
         , minutesToSet
@@ -177,18 +186,25 @@ begin
         , settingInProgress
         , settingMode
     );
-	 
-	 SEVEN_SEGMENT_DISPLAY: SevenSegmentDisplay port map (
-			 clk
-		  , SevenSegmentDisplayClock
-		  , hoursToDisplay       
-		  , minutesToDisplay
-		  , secondsToDisplay
-		  , isAlarmSet
-		  , blink
-		  , DisplayData
-		  , DisplayControl
+
+    SEVEN_SEGMENT_DISPLAY: SevenSegmentDisplay port map (
+          clk
+        , SevenSegmentDisplayClock
+        , hoursToDisplay       
+        , minutesToDisplay
+        , secondsToDisplay
+        , isAlarmSet
+        , blink
+        , DisplayData
+        , DisplayControl
     );
 
+    -- For test only
+    -- H_out <= hoursToDisplay;
+    -- M_out <= minutesToDisplay;
+    -- S_out <= secondsToDisplay;
+    -- settingReset <= settingDone;
+    -- alarmOut <= alarm;
+    -- alarmOutSet <= isAlarmSet;
 
 end Behavioral;

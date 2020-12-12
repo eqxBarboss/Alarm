@@ -35,14 +35,16 @@ architecture Behavioral of DigitalClock is
     end component;
 	 
 	 constant REAL_TIME_CLOCK_THREASHOLD: std_logic_vector(31 downto 0) := conv_std_logic_vector(100000000, 32);
-	 constant REAL_TIME_CLOCK_THREASHOLD_STUB: std_logic_vector(31 downto 0) := conv_std_logic_vector(1, 32);
+	 constant REAL_TIME_CLOCK_THREASHOLD_STUB: std_logic_vector(31 downto 0) := conv_std_logic_vector(100, 32);
 
     signal oneSecondPulse: std_logic; -- 1-s clock
-    signal hours, minutes, seconds: integer;
+	 signal hours: integer := 5;
+	 signal minutes: integer := 35;
+	 signal seconds: integer := 10;
 
 begin
     -- Create 1-s clock
-    ONE_SECOND_CLOCK: ClockDivider port map (REAL_TIME_CLOCK_THREASHOLD_STUB, clk, oneSecondPulse); 
+    ONE_SECOND_CLOCK: ClockDivider port map (REAL_TIME_CLOCK_THREASHOLD, clk, oneSecondPulse); 
 
     -- Clock operation
     process (oneSecondPulse, rst)

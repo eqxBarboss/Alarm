@@ -52,7 +52,7 @@ architecture Behavioral of SevenSegmentDisplay is
 	signal count: integer := 0;
 	
 	constant REAL_TIME_CLOCK_THREASHOLD: std_logic_vector(31 downto 0) := conv_std_logic_vector(25000000, 32);
-	constant REAL_TIME_CLOCK_THREASHOLD_STUB: std_logic_vector(31 downto 0) := conv_std_logic_vector(1, 32);
+	constant REAL_TIME_CLOCK_THREASHOLD_STUB: std_logic_vector(31 downto 0) := conv_std_logic_vector(25, 32);
 	
 	constant Empty: std_logic_vector(3 downto 0) := "1111";
 
@@ -77,7 +77,7 @@ architecture Behavioral of SevenSegmentDisplay is
 	signal DataBinary_temp: std_logic_vector(3 downto 0);
 begin	
 
-	QUARTER_SECOND_CLOCK: ClockDivider port map (REAL_TIME_CLOCK_THREASHOLD_STUB, clk, pulse); 
+	QUARTER_SECOND_CLOCK: ClockDivider port map (REAL_TIME_CLOCK_THREASHOLD, clk, pulse); 
 	
 	process(pulse, refreshClk, Blink)
 	begin	
