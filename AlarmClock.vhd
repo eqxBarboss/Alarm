@@ -6,7 +6,6 @@ use IEEE.STD_LOGIC_ARITH.conv_std_logic_vector;
 entity AlarmClock is
     port ( 
         clk: in std_logic; 
-		  refreshClk: in std_logic;
         rst: in std_logic;
         timeButton: in std_logic;
         alarmButton: in std_logic;
