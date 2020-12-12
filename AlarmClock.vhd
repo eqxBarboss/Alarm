@@ -1,6 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.all;
+use IEEE.STD_LOGIC_ARITH.conv_std_logic_vector;
 
 entity AlarmClock is
     port ( 
@@ -16,6 +17,14 @@ entity AlarmClock is
 end AlarmClock;
 
 architecture Behavioral of AlarmClock is
+
+    component ClockDivider
+        port (
+            threshold: in std_logic_vector(31 downto 0);
+            clk: in std_logic;
+            dividedClk: out std_logic
+        );
+    end component;
 
     component DigitalClock
         port (
@@ -63,10 +72,16 @@ architecture Behavioral of AlarmClock is
         );
     end component;
 
+    -- Clock for input driver has 0.1s period
+    constant INPUT_CLOCK_THREASHOLD: std_logic_vector(31 downto 0) := conv_std_logic_vector(10000000, 32);
+
     -- Time data
     signal hours: std_logic_vector(4 downto 0);
     signal minutes: std_logic_vector(5 downto 0);
     signal seconds: std_logic_vector(5 downto 0);
+
+    -- Clocks
+    signal inputDriverClk: std_logic;
 
     signal hoursToSet: std_logic_vector(4 downto 0);
     signal minutesToSet: std_logic_vector(5 downto 0);
@@ -108,8 +123,10 @@ begin
         , alarm
     );
 
+    INPUR_CLOCK_DIVIDER: ClockDivider port map (INPUT_CLOCK_THREASHOLD, clk, inputDriverClk); 
+
     INPUT_DRIVER: InputDriver port map (
-          clk
+          inputDriverClk
         , timeButton
         , alarmButton
         , incrementHoursButton
